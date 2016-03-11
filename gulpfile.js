@@ -37,7 +37,8 @@ gulp.task('lessify', function() {
 });
 
 gulp.task('watch', function() {
-	gulp.watch('./client/app.js', ['browserify']);
+	gulp.watch('./client/*.js', ['browserify']);
+	gulp.watch('./client/*.jsx', ['browserify']);
 	gulp.watch('./client/styles.less', ['lessify']);
 });
 

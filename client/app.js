@@ -1,14 +1,27 @@
 var React = require('react');
 var ReactDOM = require('react-DOM');
 var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
+var Modal = require('react-modal');
+
+var customModalStyle = {
+"display":"none",
+"position":"fixed",
+"left":"0",
+"right":"0",
+"background-color":"#fafafa",
+"padding":"0",
+"height":"20%",
+"max-height":"70%",
+"width":"55%",
+"margin":"auto",
+"overflow-y":"auto",
+"border-radius":"2px",
+"will-change":"top, opacity"
+};
 // var nextChoice = require('./helpers.js')
 
-// alert to refresh and replay game
-//To Do: Make Player Scores
-//Toggle auto Play vs Minimax
-//disable playmode during game duration
-//make alert actually a modal
-//browserify handle
+//make alert actually a modal. 30 min
+//browserify handle. 30 min
 //Style
 
 
@@ -138,8 +151,10 @@ var GameBoard = React.createClass({
 				<GameOverAlert isOpen={this.state.gameOver} handleAlertClose={this.handleAlertClose} transitionName="modal-anim">
 					<div>asdf</div>
 				</GameOverAlert>
-				<TogglePlay gameStarted = {this.state.gameStarted} singlePlayer = {this.state.singlePlayer} twoPlayer={this.state.twoPlayer} handlePlayModeChange = {this.handlePlayModeChange} />
-				<ScoreBoard playerScore={this.state.playerScore} opponentScore={this.state.opponentScore} />
+				<div className="row">
+					<TogglePlay className="col-s4" gameStarted = {this.state.gameStarted} singlePlayer = {this.state.singlePlayer} twoPlayer={this.state.twoPlayer} handlePlayModeChange = {this.handlePlayModeChange} />
+					<ScoreBoard className="col-s4" playerScore={this.state.playerScore} opponentScore={this.state.opponentScore} />
+				</div>
 				<table className="game-board-table">
 					<tbody>
 						<tr className="row-1">
@@ -169,14 +184,10 @@ var GameOverAlert = React.createClass({
 		console.log(this.props.isOpen)
 		if (this.props.isOpen){
 			return (
-				<ReactCSSTransitionGroup transitionName={this.props.transitionName}>
-					<div className="game-over-alert ">
-						<div className="none">
-							<h1>Game Over</h1>
-							<button onClick={this.props.handleAlertClose} className="waves-effect waves-light btn">Play Again</button>
-						</div>
-					</div>
-				</ReactCSSTransitionGroup>
+				<Modal isOpen={true} onRequestClose={this.props.handleAlertClose} style={customModalStyle}>
+					Game Over
+					<button className="btn waves-effect waves-light" onClick={this.props.handleAlertClose}>close</button>
+				</Modal>
 			)
 		}else{
 			return <div></div>

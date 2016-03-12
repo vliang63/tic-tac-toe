@@ -1,6 +1,13 @@
 var React = require('react');
 var ReactDOM = require('react-DOM');
+var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 // var nextChoice = require('./helpers.js')
+
+// alert to refresh and replay game
+//To Do: Make Player Scores
+//Toggle auto Play vs Minimax
+//Style
+
 
 var Game = React.createClass({
 	render: function () {
@@ -15,9 +22,11 @@ var Game = React.createClass({
 
 var GameBoard = React.createClass({
 	getInitialState: function() {
+		console.log('getting initial state')
 		return {
 			"boardData": [["","",""],["","",""],["","",""]],
-			"currentPlayer":"X"
+			"currentPlayer":"X",
+			"gameOver":false
 		}
 	},
 	handlePieceMove: function(address){
@@ -29,7 +38,7 @@ var GameBoard = React.createClass({
 		if (gameOverStatus[0]){
 			console.log('game over')
 			console.log(gameOverStatus[1])
-			this.setState({boardData:boardData})
+			this.setState({boardData:boardData, gameOver:true})
 			// Create user scoreboard
 			// Create game over alert
 			return;
@@ -48,36 +57,60 @@ var GameBoard = React.createClass({
 			setTimeout(function(){this.handlePieceMove(getNextMove(this.state.boardData, this.state.currentPlayer).join(","))}.bind(this),1000)
 		}
 	},
+	handleAlertClose: function() {
+		console.log('handling alert close')
+		this.setState(this.getInitialState());
+	},
 	render: function() {
 		return (
-			<table className="game-board">
-				<tbody>
-					<tr className="row-1">
-						<BoardSquare address="0,0" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[0][0]}/>
-						<BoardSquare address="0,1" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[0][1]}/>
-						<BoardSquare address="0,2" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[0][2]}/>
-					</tr>
-					<tr className="row-2">
-						<BoardSquare address="1,0" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[1][0]}/>
-						<BoardSquare address="1,1" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[1][1]}/>
-						<BoardSquare address="1,2" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[1][2]}/>
-					</tr>
-					<tr className="row-3">
-						<BoardSquare address="2,0" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[2][0]}/>
-						<BoardSquare address="2,1" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[2][1]}/>
-						<BoardSquare address="2,2" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[2][2]}/>
-					</tr>
-				</tbody>
-			</table>
+			<div className="game-board">
+				<GameOverAlert isOpen={this.state.gameOver} handleAlertClose={this.handleAlertClose} transitionName="modal-anim">
+					<div>asdf</div>
+				</GameOverAlert>
+				<table className="game-board-table">
+					<tbody>
+						<tr className="row-1">
+							<BoardSquare address="0,0" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[0][0]}/>
+							<BoardSquare address="0,1" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[0][1]}/>
+							<BoardSquare address="0,2" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[0][2]}/>
+						</tr>
+						<tr className="row-2">
+							<BoardSquare address="1,0" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[1][0]}/>
+							<BoardSquare address="1,1" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[1][1]}/>
+							<BoardSquare address="1,2" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[1][2]}/>
+						</tr>
+						<tr className="row-3">
+							<BoardSquare address="2,0" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[2][0]}/>
+							<BoardSquare address="2,1" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[2][1]}/>
+							<BoardSquare address="2,2" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[2][2]}/>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		)
 	}
 });
 
-// var GameOverAlert = React.createClass({
-// 	return (
-// 		<
-// 	)
-// });
+var GameOverAlert = React.createClass({
+	render: function() {
+		console.log(this.props.isOpen)
+		if (this.props.isOpen){
+			return (
+				<ReactCSSTransitionGroup transitionName={this.props.transitionName}>
+					<div className="game-over-alert ">
+						<div className="none">
+							<h1>Game Over</h1>
+							<button onClick={this.props.handleAlertClose} className="waves-effect waves-light btn">Play Again</button>
+						</div>
+					</div>
+				</ReactCSSTransitionGroup>
+			)
+		}else{
+			return <div></div>
+		}
+	}
+	
+});
 
 var BoardSquare = React.createClass({
 	handlePieceMove: function() {

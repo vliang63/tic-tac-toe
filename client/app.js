@@ -6,6 +6,7 @@ var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 // alert to refresh and replay game
 //To Do: Make Player Scores
 //Toggle auto Play vs Minimax
+//disable playmode during game duration
 //Style
 
 
@@ -20,14 +21,64 @@ var Game = React.createClass({
 	}
 });
 
+var ScoreBoard = React.createClass({
+	render: function () {
+		return (
+			<table className="score-board striped centered">
+				<thead><tr><th>Player (X)</th><th>Opponent (O)</th></tr></thead>
+				<tbody>
+					<tr><td>{this.props.playerScore}</td><td>{this.props.opponentScore}</td></tr>
+				</tbody>
+			</table>
+		)
+	}
+});
+
+var TogglePlay = React.createClass({
+	handlePlayModeChange: function(e){
+		console.log(e.target.name)
+		this.props.handlePlayModeChange(e.target.name);
+	},
+	render: function() {
+		return (
+			<form className="player-mode-choice">
+				<input onClick={this.handlePlayModeChange} checked={this.props.singlePlayer} name="singlePlayer" type="radio" id="singlePlayer" />
+      			<label htmlFor="singlePlayer">Single Player</label>
+				<input onClick={this.handlePlayModeChange} checked={this.props.twoPlayer} name="twoPlayer" type="radio" id="twoPlayer" />
+      			<label htmlFor="twoPlayer">Two Player</label>
+			</form>
+
+		)
+	}	
+
+});
+
 var GameBoard = React.createClass({
 	getInitialState: function() {
 		console.log('getting initial state')
 		return {
 			"boardData": [["","",""],["","",""],["","",""]],
 			"currentPlayer":"X",
-			"gameOver":false
+			"gameOver":false,
+			"playerScore":0,
+			"opponentScore":0,
+			"singlePlayer": "checked",
+			"twoPlayer":""
 		}
+	},
+	handlePlayModeChange: function(value){
+		var singlePlayer = "";
+		var twoPlayer = "";
+		if (value === "singlePlayer"){
+			singlePlayer = "checked";
+		}else{
+			twoPlayer = "checked";
+		}
+
+		this.setState({
+			singlePlayer: singlePlayer,
+			twoPlayer: twoPlayer
+		});
 	},
 	handlePieceMove: function(address){
 		console.log('handling piece move')
@@ -38,9 +89,14 @@ var GameBoard = React.createClass({
 		if (gameOverStatus[0]){
 			console.log('game over')
 			console.log(gameOverStatus[1])
-			this.setState({boardData:boardData, gameOver:true})
-			// Create user scoreboard
-			// Create game over alert
+			playerScore = this.state.playerScore;
+			opponentScore = this.state.opponentScore;
+			if (gameOverStatus[1] === "X"){
+				playerScore+=1
+			}else{
+				opponentScore+=1;
+			}
+			this.setState({boardData:boardData, gameOver:true, playerScore:playerScore, opponentScore:opponentScore})
 			return;
 		}
 		var nextPlayer = this.state.currentPlayer === "X" ? "O" : "X";
@@ -50,16 +106,22 @@ var GameBoard = React.createClass({
 		})		
 	},
 	componentDidUpdate: function() {
-		console.log('componenetdidupdate')
-		console.log(this.state.currentPlayer)
-		if(this.state.currentPlayer === "O") {
-			console.log('handling move')
-			setTimeout(function(){this.handlePieceMove(getNextMove(this.state.boardData, this.state.currentPlayer).join(","))}.bind(this),1000)
+		if (this.state.singlePlayer) {
+			console.log('componenetdidupdate')
+			console.log(this.state.currentPlayer)
+			if(this.state.currentPlayer === "O") {
+				console.log('handling move')
+				setTimeout(function(){this.handlePieceMove(getNextMove(this.state.boardData, this.state.currentPlayer).join(","))}.bind(this),1000)
+			}
 		}
 	},
 	handleAlertClose: function() {
 		console.log('handling alert close')
-		this.setState(this.getInitialState());
+		var initialState = this.getInitialState();
+		initialState['playerScore'] = this.state.playerScore;
+		initialState['opponentScore'] = this.state.opponentScore;
+		initialState['playMode'] = this.state.playMode;
+		this.setState(initialState);
 	},
 	render: function() {
 		return (
@@ -67,6 +129,8 @@ var GameBoard = React.createClass({
 				<GameOverAlert isOpen={this.state.gameOver} handleAlertClose={this.handleAlertClose} transitionName="modal-anim">
 					<div>asdf</div>
 				</GameOverAlert>
+				<TogglePlay singlePlayer = {this.state.singlePlayer} twoPlayer={this.state.twoPlayer} handlePlayModeChange = {this.handlePlayModeChange} />
+				<ScoreBoard playerScore={this.state.playerScore} opponentScore={this.state.opponentScore} />
 				<table className="game-board-table">
 					<tbody>
 						<tr className="row-1">

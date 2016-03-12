@@ -13,10 +13,9 @@ function swallowError (error) {
     this.emit("end");
 }
 
-
 gulp.task('browserify', function() {
 	return browserify({
-		entries:'./client/app.js',
+		entries:['./client/app.js', './client/helpers.js'],
 		debug: true
 	})
 	.transform(babelify.configure({presets:"react"}))

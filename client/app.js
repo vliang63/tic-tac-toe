@@ -7,6 +7,8 @@ var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 //To Do: Make Player Scores
 //Toggle auto Play vs Minimax
 //disable playmode during game duration
+//make alert actually a modal
+//browserify handle
 //Style
 
 
@@ -40,11 +42,12 @@ var TogglePlay = React.createClass({
 		this.props.handlePlayModeChange(e.target.name);
 	},
 	render: function() {
+		var disabled = this.props.gameStarted ? "disabled" : "";
 		return (
 			<form className="player-mode-choice">
-				<input onClick={this.handlePlayModeChange} checked={this.props.singlePlayer} name="singlePlayer" type="radio" id="singlePlayer" />
+				<input disabled={disabled} onClick={this.handlePlayModeChange} checked={this.props.singlePlayer} name="singlePlayer" type="radio" id="singlePlayer" />
       			<label htmlFor="singlePlayer">Single Player</label>
-				<input onClick={this.handlePlayModeChange} checked={this.props.twoPlayer} name="twoPlayer" type="radio" id="twoPlayer" />
+				<input disabled={disabled} onClick={this.handlePlayModeChange} checked={this.props.twoPlayer} name="twoPlayer" type="radio" id="twoPlayer" />
       			<label htmlFor="twoPlayer">Two Player</label>
 			</form>
 
@@ -63,7 +66,8 @@ var GameBoard = React.createClass({
 			"playerScore":0,
 			"opponentScore":0,
 			"singlePlayer": "checked",
-			"twoPlayer":""
+			"twoPlayer":"",
+			"gameStarted": false
 		}
 	},
 	handlePlayModeChange: function(value){
@@ -100,10 +104,14 @@ var GameBoard = React.createClass({
 			return;
 		}
 		var nextPlayer = this.state.currentPlayer === "X" ? "O" : "X";
-		this.setState({
+		var newGameBoardState = {
 			"boardData": boardData,
-			"currentPlayer": nextPlayer
-		})		
+			"currentPlayer": nextPlayer,
+		};
+		if (this.state.gameStarted === false) {
+			newGameBoardState["gameStarted"] = true;
+		}
+		this.setState(newGameBoardState)		
 	},
 	componentDidUpdate: function() {
 		if (this.state.singlePlayer) {
@@ -120,7 +128,8 @@ var GameBoard = React.createClass({
 		var initialState = this.getInitialState();
 		initialState['playerScore'] = this.state.playerScore;
 		initialState['opponentScore'] = this.state.opponentScore;
-		initialState['playMode'] = this.state.playMode;
+		initialState['singlePlayer'] = this.state.singlePlayer;
+		initialState['twoPlayer'] = this.state.twoPlayer;
 		this.setState(initialState);
 	},
 	render: function() {
@@ -129,7 +138,7 @@ var GameBoard = React.createClass({
 				<GameOverAlert isOpen={this.state.gameOver} handleAlertClose={this.handleAlertClose} transitionName="modal-anim">
 					<div>asdf</div>
 				</GameOverAlert>
-				<TogglePlay singlePlayer = {this.state.singlePlayer} twoPlayer={this.state.twoPlayer} handlePlayModeChange = {this.handlePlayModeChange} />
+				<TogglePlay gameStarted = {this.state.gameStarted} singlePlayer = {this.state.singlePlayer} twoPlayer={this.state.twoPlayer} handlePlayModeChange = {this.handlePlayModeChange} />
 				<ScoreBoard playerScore={this.state.playerScore} opponentScore={this.state.opponentScore} />
 				<table className="game-board-table">
 					<tbody>

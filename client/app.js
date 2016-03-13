@@ -5,24 +5,27 @@ var Modal = require('react-modal');
 var getNextMove = require('./helpers.js').getNextMove;
 var gameOver = require('./helpers.js').gameOver;
 
+// Styling
+  // Fix Modal
+  // 
+// Refactor board to make it a class
+// Fix minimax
+
 var customModalStyle = {
-"display":"none",
-"position":"fixed",
-"left":"0",
-"right":"0",
-"background-color":"#fafafa",
-"padding":"0",
-"height":"20%",
-"max-height":"70%",
-"width":"55%",
-"margin":"auto",
-"overflow-y":"auto",
-"border-radius":"2px",
-"will-change":"top, opacity"
+	content: {
+		position:"fixed",
+		left:"0",
+		right:"0",
+		backgroundColor:"#fafafa",
+		padding:"0",
+		height: "25%",
+		maxHeight:"70%",
+		width:"55%",
+		margin:"auto",
+		overflowY:"auto",
+		borderRadius:"2px"
+	}
 };
-
-//Style
-
 
 var Game = React.createClass({
 	render: function () {
@@ -79,7 +82,8 @@ var GameBoard = React.createClass({
 			"opponentScore":0,
 			"singlePlayer": "checked",
 			"twoPlayer":"",
-			"gameStarted": false
+			"gameStarted": false,
+			"winner":""
 		}
 	},
 	handlePlayModeChange: function(value){
@@ -112,7 +116,7 @@ var GameBoard = React.createClass({
 			}else{
 				opponentScore+=1;
 			}
-			this.setState({boardData:boardData, gameOver:true, playerScore:playerScore, opponentScore:opponentScore})
+			this.setState({boardData:boardData, winner: gameOverStatus[1], gameOver:true, playerScore:playerScore, opponentScore:opponentScore})
 			return;
 		}
 		var nextPlayer = this.state.currentPlayer === "X" ? "O" : "X";
@@ -147,7 +151,7 @@ var GameBoard = React.createClass({
 	render: function() {
 		return (
 			<div className="game-board">
-				<GameOverAlert isOpen={this.state.gameOver} handleAlertClose={this.handleAlertClose} transitionName="modal-anim">
+				<GameOverAlert winner={this.state.winner} isOpen={this.state.gameOver} handleAlertClose={this.handleAlertClose} transitionName="modal-anim">
 					<div>asdf</div>
 				</GameOverAlert>
 				<div className="row">
@@ -184,8 +188,13 @@ var GameOverAlert = React.createClass({
 		if (this.props.isOpen){
 			return (
 				<Modal isOpen={true} onRequestClose={this.props.handleAlertClose} style={customModalStyle}>
-					Game Over
-					<button className="btn waves-effect waves-light" onClick={this.props.handleAlertClose}>close</button>
+					
+						<h3 className="modal-header"> Game Over </h3>
+						<h5 className="modal-body"> Player {this.props.winner} has won! </h5>	
+						<div className="modal-close">
+							<button className="btn waves-effect waves-light" onClick={this.props.handleAlertClose}>Click here to play again</button>
+						</div>
+					
 				</Modal>
 			)
 		}else{

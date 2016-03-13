@@ -2,7 +2,11 @@ td {
 	height:200px;
 	width:200px;
 }
-
+.score-board{
+	td {
+		height:3
+	}
+}
 .board-square {
 	font-size: 100px;
 	margin-top: 5px;
@@ -10,7 +14,27 @@ td {
 	text-align: center;
 }
 
+.modal-anim-enter {
+    opacity: 0.00;
+    transform: scale(0.7);
+    transition: all 0.2s;
+}
 
+.modal-anim-enter.modal-anim-enter-active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.modal-anim-leave {
+    opacity: 1;
+    transform: scale(1);
+    transition: all 0.2s;
+}
+
+.modal-anim-leave.modal-anim-leave-active {
+    opacity: 0.00;
+    transform: scale(0.7);
+}
 .game-title{
 	text-align: center;
 }
@@ -45,4 +69,34 @@ td {
 		border-left: solid 1px black;
 		border-right: solid 1px black;
 	}
+}
+.player-mode-choice {
+	display: inline-block;
+}
+
+table.centered.score-board {
+	float: right;
+	display: inline-block;
+	thead tr th {
+		height: 30px;
+		border: solid 1px grey;
+	}
+	tbody tr td {
+		height: 30px;
+		border: solid 1px grey;
+	}
+}
+
+.modal-header {
+	text-align: center;
+	border-bottom: solid 1px darken(#fafafa, 20%)
+}
+
+.modal-body {
+	text-align: center;
+}
+
+.modal-close {
+	text-align:center;
+	margin-top: 25px;
 }

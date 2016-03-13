@@ -1,15 +1,13 @@
 var React = require('react');
 var ReactDOM = require('react-DOM');
-var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 var Modal = require('react-modal');
 var getNextMove = require('./helpers.js').getNextMove;
 var gameOver = require('./helpers.js').gameOver;
 
-// Styling
-  // Fix Modal
-  // 
-// Refactor board to make it a class
 // Fix minimax
+// Styling
+// Add css transitions
+
 
 var customModalStyle = {
 	content: {
@@ -19,10 +17,8 @@ var customModalStyle = {
 		backgroundColor:"#fafafa",
 		padding:"0",
 		height: "25%",
-		maxHeight:"70%",
 		width:"55%",
 		margin:"auto",
-		overflowY:"auto",
 		borderRadius:"2px"
 	}
 };
@@ -36,6 +32,39 @@ var Game = React.createClass({
 			</div>
 		)	
 	}
+});
+
+var BoardSquare = React.createClass({
+	handlePieceMove: function() {
+		if (!this.props.status && this.props.status !== this.props.player){
+			this.props.handlePieceMove(this.props.address)
+		}		
+	},
+	render: function () {
+		return (
+			<td address={this.props.address} onClick={this.handlePieceMove} className="board-square">{this.props.status}</td>
+		)
+	}
+});
+
+var GameOverAlert = React.createClass({
+	render: function() {
+		console.log(this.props.isOpen)
+		if (this.props.isOpen){
+			return (
+				<Modal isOpen={true} onRequestClose={this.props.handleAlertClose} style={customModalStyle}>	
+						<h3 className="modal-header"> Game Over </h3>
+						<h5 className="modal-body"> Player {this.props.winner} has won! </h5>	
+						<div className="modal-close">
+							<button className="btn waves-effect waves-light" onClick={this.props.handleAlertClose}>Click here to play again</button>
+						</div>
+				</Modal>
+			)
+		}else{
+			return <div></div>
+		}
+	}
+	
 });
 
 var ScoreBoard = React.createClass({
@@ -53,7 +82,6 @@ var ScoreBoard = React.createClass({
 
 var TogglePlay = React.createClass({
 	handlePlayModeChange: function(e){
-		console.log(e.target.name)
 		this.props.handlePlayModeChange(e.target.name);
 	},
 	render: function() {
@@ -65,15 +93,23 @@ var TogglePlay = React.createClass({
 				<input disabled={disabled} onClick={this.handlePlayModeChange} checked={this.props.twoPlayer} name="twoPlayer" type="radio" id="twoPlayer" />
       			<label htmlFor="twoPlayer">Two Player</label>
 			</form>
-
 		)
 	}	
+});
 
+var SinglePlayerLevel = React.createClass({
+	render: function() {
+		return (
+			<form className="single-player-level">
+					<input disabled checked="defaultChecked" name="singlePlayerEasy" type="radio" id="singlePlayerEasy" />
+	      			<label htmlFor="singlePlayerEasy">Easy</label>
+			</form>
+		)
+	}
 });
 
 var GameBoard = React.createClass({
 	getInitialState: function() {
-		console.log('getting initial state')
 		return {
 			"boardData": [["","",""],["","",""],["","",""]],
 			"currentPlayer":"X",
@@ -101,14 +137,12 @@ var GameBoard = React.createClass({
 		});
 	},
 	handlePieceMove: function(address){
-		console.log('handling piece move')
 		var addressLoc = address.split(",")
+		console.log(addressLoc)
 		var boardData = this.state.boardData
 		boardData[addressLoc[0]][addressLoc[1]] = this.state.currentPlayer;
 		gameOverStatus = gameOver(boardData)
 		if (gameOverStatus[0]){
-			console.log('game over')
-			console.log(gameOverStatus[1])
 			playerScore = this.state.playerScore;
 			opponentScore = this.state.opponentScore;
 			if (gameOverStatus[1] === "X"){
@@ -131,16 +165,12 @@ var GameBoard = React.createClass({
 	},
 	componentDidUpdate: function() {
 		if (this.state.singlePlayer) {
-			console.log('componenetdidupdate')
-			console.log(this.state.currentPlayer)
 			if(this.state.currentPlayer === "O") {
-				console.log('handling move')
-				setTimeout(function(){this.handlePieceMove(getNextMove(this.state.boardData, this.state.currentPlayer).join(","))}.bind(this),1000)
+				setTimeout(function(){this.handlePieceMove(getNextMove(this.state.boardData))}.bind(this),1000)
 			}
 		}
 	},
 	handleAlertClose: function() {
-		console.log('handling alert close')
 		var initialState = this.getInitialState();
 		initialState['playerScore'] = this.state.playerScore;
 		initialState['opponentScore'] = this.state.opponentScore;
@@ -155,8 +185,9 @@ var GameBoard = React.createClass({
 					<div>asdf</div>
 				</GameOverAlert>
 				<div className="row">
-					<TogglePlay className="col-s4" gameStarted = {this.state.gameStarted} singlePlayer = {this.state.singlePlayer} twoPlayer={this.state.twoPlayer} handlePlayModeChange = {this.handlePlayModeChange} />
-					<ScoreBoard className="col-s4" playerScore={this.state.playerScore} opponentScore={this.state.opponentScore} />
+					<TogglePlay gameStarted = {this.state.gameStarted} singlePlayer = {this.state.singlePlayer} twoPlayer={this.state.twoPlayer} handlePlayModeChange = {this.handlePlayModeChange} />
+					<SinglePlayerLevel />
+					<ScoreBoard playerScore={this.state.playerScore} opponentScore={this.state.opponentScore} />
 				</div>
 				<table className="game-board-table">
 					<tbody>
@@ -178,42 +209,6 @@ var GameBoard = React.createClass({
 					</tbody>
 				</table>
 			</div>
-		)
-	}
-});
-
-var GameOverAlert = React.createClass({
-	render: function() {
-		console.log(this.props.isOpen)
-		if (this.props.isOpen){
-			return (
-				<Modal isOpen={true} onRequestClose={this.props.handleAlertClose} style={customModalStyle}>
-					
-						<h3 className="modal-header"> Game Over </h3>
-						<h5 className="modal-body"> Player {this.props.winner} has won! </h5>	
-						<div className="modal-close">
-							<button className="btn waves-effect waves-light" onClick={this.props.handleAlertClose}>Click here to play again</button>
-						</div>
-					
-				</Modal>
-			)
-		}else{
-			return <div></div>
-		}
-	}
-	
-});
-
-var BoardSquare = React.createClass({
-	handlePieceMove: function() {
-		if (!this.props.status && this.props.status !== this.props.player){
-			console.log('moving piece')
-			this.props.handlePieceMove(this.props.address)
-		}		
-	},
-	render: function () {
-		return (
-			<td address={this.props.address} onClick={this.handlePieceMove} className="board-square">{this.props.status}</td>
 		)
 	}
 });

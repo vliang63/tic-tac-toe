@@ -4,10 +4,6 @@ var Modal = require('react-modal');
 var getNextMove = require('./helpers.js').getNextMove;
 var gameOver = require('./helpers.js').gameOver;
 
-// Styling
-// Add css transitions
-
-
 var customModalStyle = {
 	content: {
 		position:"fixed",
@@ -48,7 +44,6 @@ var BoardSquare = React.createClass({
 
 var GameOverAlert = React.createClass({
 	render: function() {
-		console.log(this.props.isOpen)
 		if (this.props.isOpen){
 			return (
 				<Modal isOpen={true} onRequestClose={this.props.handleAlertClose} style={customModalStyle}>	
@@ -85,15 +80,16 @@ var TogglePlay = React.createClass({
 	},
 	render: function() {
 		var disabled = this.props.gameStarted ? "disabled" : "";
+		var showLevel = this.props.singlePlayer === "checked" ? "false" : "true";
 		return (
 			<form className="col s4 player-mode-choice">
-				<input disabled={disabled} onClick={this.handlePlayModeChange} checked={this.props.singlePlayer} name="singlePlayer" type="radio" id="singlePlayer" />
+				<input disabled={disabled} onChange={this.handlePlayModeChange} checked={this.props.singlePlayer} name="singlePlayer" type="radio" id="singlePlayer" />
       			<label htmlFor="singlePlayer">Single Player</label>
-				<input disabled={disabled} onClick={this.handlePlayModeChange} checked={this.props.twoPlayer} name="twoPlayer" type="radio" id="twoPlayer" />
+				<input disabled={disabled} onChange={this.handlePlayModeChange} checked={this.props.twoPlayer} name="twoPlayer" type="radio" id="twoPlayer" />
       			<label htmlFor="twoPlayer">Two Player</label>
 				<br></br>
-				<input disabled checked="defaultChecked" name="singlePlayerEasy" type="radio" id="singlePlayerEasy" />
-	      		<label htmlFor="singlePlayerEasy">Easy</label>
+				<input hidden={showLevel} disabled checked="checked" name="singlePlayerEasy" type="radio" id="singlePlayerEasy" />
+      			<label hidden={showLevel} htmlFor="singlePlayerEasy">Easy</label>
 			</form>
 		)
 	}	
@@ -103,7 +99,7 @@ var SinglePlayerLevel = React.createClass({
 	render: function() {
 		return (
 			<form className="single-player-level">
-					<input disabled checked="defaultChecked" name="singlePlayerEasy" type="radio" id="singlePlayerEasy" />
+					<input disabled checked="checked" name="singlePlayerEasy" type="radio" id="singlePlayerEasy" />
 	      			<label htmlFor="singlePlayerEasy">Easy</label>
 			</form>
 		)
@@ -119,7 +115,7 @@ var GameBoard = React.createClass({
 			"playerScore":0,
 			"opponentScore":0,
 			"singlePlayer": "",
-			"twoPlayer":"defaultChecked",
+			"twoPlayer":"checked",
 			"gameStarted": false,
 			"winner":""
 		}
@@ -140,7 +136,6 @@ var GameBoard = React.createClass({
 	},
 	handlePieceMove: function(address){
 		var addressLoc = address.split(",")
-		console.log(addressLoc)
 		var boardData = this.state.boardData
 		boardData[addressLoc[0]][addressLoc[1]] = this.state.currentPlayer;
 		gameOverStatus = gameOver(boardData)

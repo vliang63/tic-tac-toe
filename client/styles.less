@@ -1,12 +1,21 @@
+@game-border: solid 4px @theme-blue;
+@theme-blue: #00affc;
+@theme-light-blue: lighten(#00affc, 20%);
+@theme-orange: #FF8000;
+
 td {
 	height:200px;
 	width:200px;
 }
-.score-board{
-	td {
-		height:3
-	}
+
+button.btn:hover{
+	background-color: @theme-light-blue;
 }
+
+button.btn{
+	background-color: @theme-blue;
+}
+
 .board-square {
 	font-size: 100px;
 	margin-top: 5px;
@@ -41,33 +50,33 @@ td {
 
 .row-1 {
 	:first-child{
-		border-bottom: solid 1px black;
+		border-bottom: @game-border;
 	}
 	:nth-child(2){
-		border-left: solid 1px black;
-		border-right: solid 1px black;
+		border-left: @game-border;
+		border-right: @game-border;
 	}
 	:last-child{
-		border-bottom: solid 1px black;
+		border-bottom: @game-border;
 	}
 }
 
 .row-2 {
 	:first-child{
-		border-bottom: solid 1px black;
+		border-bottom: @game-border;
 	}
 	:nth-child(2){
-		border: solid 1px black;
+		border: @game-border;
 	}
 	:last-child{
-		border-bottom: solid 1px black;
+		border-bottom: @game-border;
 	}
 }
 
 .row-3 {
 	:nth-child(2){
-		border-left: solid 1px black;
-		border-right: solid 1px black;
+		border-left: @game-border;
+		border-right: @game-border;
 	}
 }
 .player-mode-choice {
@@ -75,15 +84,22 @@ td {
 }
 
 table.centered.score-board {
+	margin-top: -20px;
+	margin-bottom: 30px;
 	float: right;
-	display: inline-block;
+	display: inline;
+	width: 400px;
 	thead tr th {
-		height: 30px;
-		border: solid 1px grey;
+		height: 20px;
+		border: solid 1px white;
+		padding: 5px;
+		background-color: @theme-blue;
+		color:white;
 	}
 	tbody tr td {
-		height: 30px;
-		border: solid 1px grey;
+		height: 20px;
+		border: solid 1px white;
+		padding: 5px;
 	}
 }
 
@@ -99,4 +115,43 @@ table.centered.score-board {
 .modal-close {
 	text-align:center;
 	margin-top: 25px;
+}
+
+.game-board-table {
+	margin: auto;
+	width:750px;
+}
+
+form.single-player-level {
+	display:inline;
+}
+
+.container {
+	background-color: #fcfcfc;
+	padding-left:30px;
+	padding-right:30px;
+	height: 1000px;
+	border-radius:1%;
+}
+
+.game-title{
+	padding: 30px;
+	background-color: @theme-orange;
+	color: #FFFFFF;
+	border-radius: 5px;
+	font-weight: bold;
+}
+
+body {
+	background-color: @theme-blue;
+}
+
+[type="radio"]:checked+label:after{
+	background-color: @theme-blue;
+	border-color: #FFFFFF;
+	
+}
+
+label[for=twoPlayer]{
+	margin-left: 20px;
 }

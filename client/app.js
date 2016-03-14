@@ -4,7 +4,6 @@ var Modal = require('react-modal');
 var getNextMove = require('./helpers.js').getNextMove;
 var gameOver = require('./helpers.js').gameOver;
 
-// Fix minimax
 // Styling
 // Add css transitions
 
@@ -56,7 +55,7 @@ var GameOverAlert = React.createClass({
 						<h3 className="modal-header"> Game Over </h3>
 						<h5 className="modal-body"> Player {this.props.winner} has won! </h5>	
 						<div className="modal-close">
-							<button className="btn waves-effect waves-light" onClick={this.props.handleAlertClose}>Click here to play again</button>
+							<button className="btn" onClick={this.props.handleAlertClose}>Click here to play again</button>
 						</div>
 				</Modal>
 			)
@@ -116,8 +115,8 @@ var GameBoard = React.createClass({
 			"gameOver":false,
 			"playerScore":0,
 			"opponentScore":0,
-			"singlePlayer": "checked",
-			"twoPlayer":"",
+			"singlePlayer": "",
+			"twoPlayer":"defaultChecked",
 			"gameStarted": false,
 			"winner":""
 		}
@@ -166,7 +165,7 @@ var GameBoard = React.createClass({
 	componentDidUpdate: function() {
 		if (this.state.singlePlayer) {
 			if(this.state.currentPlayer === "O") {
-				setTimeout(function(){this.handlePieceMove(getNextMove(this.state.boardData))}.bind(this),1000)
+				setTimeout(function(){this.handlePieceMove(getNextMove(this.state.boardData))}.bind(this),100)
 			}
 		}
 	},
@@ -186,6 +185,7 @@ var GameBoard = React.createClass({
 				</GameOverAlert>
 				<div className="row">
 					<TogglePlay gameStarted = {this.state.gameStarted} singlePlayer = {this.state.singlePlayer} twoPlayer={this.state.twoPlayer} handlePlayModeChange = {this.handlePlayModeChange} />
+					<br></br>
 					<SinglePlayerLevel />
 					<ScoreBoard playerScore={this.state.playerScore} opponentScore={this.state.opponentScore} />
 				</div>

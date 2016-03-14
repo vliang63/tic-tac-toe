@@ -3,9 +3,18 @@
 @theme-light-blue: lighten(#00affc, 20%);
 @theme-orange: #FF8000;
 
+body {
+	background-color: @theme-blue;
+	font-size: 12px;
+}
+
 td {
-	height:200px;
-	width:200px;
+	height:150px;
+	width:150px;
+}
+
+[type="radio"]:not(:checked)+label, [type="radio"]:checked+label{
+	font-size: 12px;
 }
 
 button.btn:hover{
@@ -17,7 +26,7 @@ button.btn{
 }
 
 .board-square {
-	font-size: 100px;
+	font-size: 70px;
 	margin-top: 5px;
 	margin-bottom:5px;
 	text-align: center;
@@ -83,12 +92,11 @@ button.btn{
 	display: inline-block;
 }
 
-table.centered.score-board {
-	margin-top: -20px;
+table.score-board.centered {
 	margin-bottom: 30px;
 	float: right;
 	display: inline;
-	width: 400px;
+	width: 35%;
 	thead tr th {
 		height: 20px;
 		border: solid 1px white;
@@ -117,11 +125,6 @@ table.centered.score-board {
 	margin-top: 25px;
 }
 
-.game-board-table {
-	margin: auto;
-	width:750px;
-}
-
 form.single-player-level {
 	display:inline;
 }
@@ -130,25 +133,21 @@ form.single-player-level {
 	background-color: #fcfcfc;
 	padding-left:30px;
 	padding-right:30px;
-	height: 1000px;
+	height: 675px;
 	border-radius:1%;
 }
 
 .game-title{
-	padding: 30px;
+	padding: 20px;
 	background-color: @theme-orange;
 	color: #FFFFFF;
 	border-radius: 5px;
 	font-weight: bold;
 }
 
-body {
-	background-color: @theme-blue;
-}
-
 [type="radio"]:checked+label:after{
 	background-color: @theme-blue;
-	border-color: #FFFFFF;
+	border-color: @theme-blue;
 	
 }
 

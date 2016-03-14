@@ -26,7 +26,7 @@ var Game = React.createClass({
 	render: function () {
 		return (
 			<div className="container">
-				<h1 className="game-title">Tic-Tac-Toe</h1>
+				<h3 className="game-title">Tic-Tac-Toe</h3>
 				<GameBoard />
 			</div>
 		)	
@@ -52,8 +52,8 @@ var GameOverAlert = React.createClass({
 		if (this.props.isOpen){
 			return (
 				<Modal isOpen={true} onRequestClose={this.props.handleAlertClose} style={customModalStyle}>	
-						<h3 className="modal-header"> Game Over </h3>
-						<h5 className="modal-body"> Player {this.props.winner} has won! </h5>	
+						<h4 className="modal-header"> Game Over </h4>
+						<h6 className="modal-body"> Player {this.props.winner} has won! </h6>	
 						<div className="modal-close">
 							<button className="btn" onClick={this.props.handleAlertClose}>Click here to play again</button>
 						</div>
@@ -86,11 +86,14 @@ var TogglePlay = React.createClass({
 	render: function() {
 		var disabled = this.props.gameStarted ? "disabled" : "";
 		return (
-			<form className="player-mode-choice">
+			<form className="col s4 player-mode-choice">
 				<input disabled={disabled} onClick={this.handlePlayModeChange} checked={this.props.singlePlayer} name="singlePlayer" type="radio" id="singlePlayer" />
       			<label htmlFor="singlePlayer">Single Player</label>
 				<input disabled={disabled} onClick={this.handlePlayModeChange} checked={this.props.twoPlayer} name="twoPlayer" type="radio" id="twoPlayer" />
       			<label htmlFor="twoPlayer">Two Player</label>
+				<br></br>
+				<input disabled checked="defaultChecked" name="singlePlayerEasy" type="radio" id="singlePlayerEasy" />
+	      		<label htmlFor="singlePlayerEasy">Easy</label>
 			</form>
 		)
 	}	
@@ -183,31 +186,29 @@ var GameBoard = React.createClass({
 				<GameOverAlert winner={this.state.winner} isOpen={this.state.gameOver} handleAlertClose={this.handleAlertClose} transitionName="modal-anim">
 					<div>asdf</div>
 				</GameOverAlert>
+				<TogglePlay gameStarted = {this.state.gameStarted} singlePlayer = {this.state.singlePlayer} twoPlayer={this.state.twoPlayer} handlePlayModeChange = {this.handlePlayModeChange} />
+				<ScoreBoard playerScore={this.state.playerScore} opponentScore={this.state.opponentScore} />
 				<div className="row">
-					<TogglePlay gameStarted = {this.state.gameStarted} singlePlayer = {this.state.singlePlayer} twoPlayer={this.state.twoPlayer} handlePlayModeChange = {this.handlePlayModeChange} />
-					<br></br>
-					<SinglePlayerLevel />
-					<ScoreBoard playerScore={this.state.playerScore} opponentScore={this.state.opponentScore} />
+					<table className="game-board-table col s8 offset-s2">
+						<tbody>
+							<tr className="row-1">
+								<BoardSquare address="0,0" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[0][0]}/>
+								<BoardSquare address="0,1" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[0][1]}/>
+								<BoardSquare address="0,2" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[0][2]}/>
+							</tr>
+							<tr className="row-2">
+								<BoardSquare address="1,0" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[1][0]}/>
+								<BoardSquare address="1,1" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[1][1]}/>
+								<BoardSquare address="1,2" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[1][2]}/>
+							</tr>
+							<tr className="row-3">
+								<BoardSquare address="2,0" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[2][0]}/>
+								<BoardSquare address="2,1" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[2][1]}/>
+								<BoardSquare address="2,2" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[2][2]}/>
+							</tr>
+						</tbody>
+					</table>
 				</div>
-				<table className="game-board-table">
-					<tbody>
-						<tr className="row-1">
-							<BoardSquare address="0,0" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[0][0]}/>
-							<BoardSquare address="0,1" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[0][1]}/>
-							<BoardSquare address="0,2" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[0][2]}/>
-						</tr>
-						<tr className="row-2">
-							<BoardSquare address="1,0" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[1][0]}/>
-							<BoardSquare address="1,1" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[1][1]}/>
-							<BoardSquare address="1,2" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[1][2]}/>
-						</tr>
-						<tr className="row-3">
-							<BoardSquare address="2,0" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[2][0]}/>
-							<BoardSquare address="2,1" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[2][1]}/>
-							<BoardSquare address="2,2" player={this.state.currentPlayer} handlePieceMove={this.handlePieceMove} status={this.state.boardData[2][2]}/>
-						</tr>
-					</tbody>
-				</table>
 			</div>
 		)
 	}

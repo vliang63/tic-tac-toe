@@ -8,13 +8,17 @@ body {
 	font-size: 12px;
 }
 
+.container {
+	background-color: #fcfcfc;
+	padding-left:30px;
+	padding-right:30px;
+	height: 675px;
+	border-radius:1%;
+}
+
 td {
 	height:150px;
 	width:150px;
-}
-
-[type="radio"]:not(:checked)+label, [type="radio"]:checked+label{
-	font-size: 12px;
 }
 
 button.btn:hover{
@@ -25,35 +29,64 @@ button.btn{
 	background-color: @theme-blue;
 }
 
+
+
+.game-title{
+	padding: 20px;
+	background-color: @theme-orange;
+	color: #FFFFFF;
+	border-radius: 5px;
+	font-weight: bold;
+	text-align: center;
+}
+
+ // Selecting Game Play options
+.player-mode-choice {
+	display: inline-block;
+}
+
+form.single-player-level {
+	display:inline;
+}
+
+[type="radio"]:checked+label:after{
+	background-color: @theme-blue;
+	border-color: @theme-blue;	
+}
+
+label[for=twoPlayer]{
+	margin-left: 20px;
+}
+
+[type="radio"]:not(:checked)+label, [type="radio"]:checked+label{
+	font-size: 12px;
+}
+
+// ScoreBoard
+table.score-board.centered {
+	margin-bottom: 30px;
+	float: right;
+	display: inline;
+	width: 35%;
+	thead tr th {
+		height: 20px;
+		border: solid 1px white;
+		padding: 5px;
+		background-color: @theme-blue;
+		color:white;
+	}
+	tbody tr td {
+		height: 20px;
+		border: solid 1px white;
+		padding: 5px;
+	}
+}
+
+// GameBoard
 .board-square {
 	font-size: 70px;
 	margin-top: 5px;
 	margin-bottom:5px;
-	text-align: center;
-}
-
-.modal-anim-enter {
-    opacity: 0.00;
-    transform: scale(0.7);
-    transition: all 0.2s;
-}
-
-.modal-anim-enter.modal-anim-enter-active {
-    opacity: 1;
-    transform: scale(1);
-}
-
-.modal-anim-leave {
-    opacity: 1;
-    transform: scale(1);
-    transition: all 0.2s;
-}
-
-.modal-anim-leave.modal-anim-leave-active {
-    opacity: 0.00;
-    transform: scale(0.7);
-}
-.game-title{
 	text-align: center;
 }
 
@@ -88,29 +121,9 @@ button.btn{
 		border-right: @game-border;
 	}
 }
-.player-mode-choice {
-	display: inline-block;
-}
 
-table.score-board.centered {
-	margin-bottom: 30px;
-	float: right;
-	display: inline;
-	width: 35%;
-	thead tr th {
-		height: 20px;
-		border: solid 1px white;
-		padding: 5px;
-		background-color: @theme-blue;
-		color:white;
-	}
-	tbody tr td {
-		height: 20px;
-		border: solid 1px white;
-		padding: 5px;
-	}
-}
 
+//Modal
 .modal-header {
 	text-align: center;
 	border-bottom: solid 1px darken(#fafafa, 20%)
@@ -125,32 +138,4 @@ table.score-board.centered {
 	margin-top: 25px;
 }
 
-form.single-player-level {
-	display:inline;
-}
 
-.container {
-	background-color: #fcfcfc;
-	padding-left:30px;
-	padding-right:30px;
-	height: 675px;
-	border-radius:1%;
-}
-
-.game-title{
-	padding: 20px;
-	background-color: @theme-orange;
-	color: #FFFFFF;
-	border-radius: 5px;
-	font-weight: bold;
-}
-
-[type="radio"]:checked+label:after{
-	background-color: @theme-blue;
-	border-color: @theme-blue;
-	
-}
-
-label[for=twoPlayer]{
-	margin-left: 20px;
-}

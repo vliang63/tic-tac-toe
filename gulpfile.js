@@ -7,7 +7,6 @@ var source = require('vinyl-source-stream');
 var browserify = require('browserify');
 var transform = require('transform');
 
-
 function swallowError (error) {
     console.log(error.toString());
     this.emit("end");

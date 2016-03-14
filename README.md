@@ -6,5 +6,8 @@ tic-tac-toe is written using the React framework and Less as a css-preprocessor.
 
 
 Setup
-- npm install
-- gulp build
+- clone this repository (https://github.com/vliang63/tic-tac-toe.git)
+	In the application folder:
+		- node server.js
+		- npm install
+		- gulp build
